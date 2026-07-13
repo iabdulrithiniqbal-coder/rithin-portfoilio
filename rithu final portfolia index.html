@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abdul Rithin — Portfolio</title>
+<meta name="description" content="Portfolio of Abdul Rithin I — Full Stack Developer Intern (AI Focus).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#070707;
+    --bg-card:#0d0d0d;
+    --border:rgba(255,255,255,0.09);
+    --border-strong:rgba(255,255,255,0.22);
+    --text:#f2f2f0;
+    --text-dim:#93938f;
+    --text-faint:#5c5c59;
+    --red:#ef4444;
+    --red-soft:#ff6b6b;
+    --red-deep:#7f1d1d;
+    --white:#f2f2f0;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    font-weight:300;
+    overflow-x:hidden;
+    position:relative;
+  }
+  ::selection{background:#2a2a2a;color:#fff;}
+  a{color:inherit;}
+
+  #stars{position:fixed;inset:0;z-index:0;pointer-events:none;}
+
+  /* ---------- Intro screen ---------- */
+  #introScreen{
+    position:fixed;inset:0;z-index:300;background:#000;
+    display:flex;align-items:center;justify-content:center;
+    transition:opacity .7s ease;
+  }
+  #introScreen.fade-out{opacity:0;pointer-events:none;}
+  #introVideo{
+    max-width:100%;max-height:100%;width:auto;height:auto;
+  }
+  .play-btn{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:84px;height:84px;border-radius:50%;
+    background:var(--red);border:none;color:#fff;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;
+    box-shadow:0 0 0 0 rgba(239,68,68,.5);
+    animation:pulseRed 2.2s infinite;
+    z-index:301;transition:transform .2s;
+  }
+  .play-btn:hover{transform:translate(-50%,-50%) scale(1.06);}
+  .play-btn svg{margin-left:4px;}
+  @keyframes pulseRed{
+    0%{box-shadow:0 0 0 0 rgba(239,68,68,.45);}
+    70%{box-shadow:0 0 0 22px rgba(239,68,68,0);}
+    100%{box-shadow:0 0 0 0 rgba(239,68,68,0);}
+  }
+
+  .wrap{position:relative;z-index:2;max-width:1120px;margin:0 auto;padding:0 32px;}
+
+  nav{
+    position:sticky;top:0;z-index:50;
+    backdrop-filter:blur(14px);
+    background:rgba(7,7,7,0.72);
+    border-bottom:1px solid var(--border);
+  }
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;padding:20px 32px;max-width:1120px;}
+  .brand{font-family:'JetBrains Mono',monospace;font-size:14px;letter-spacing:2px;color:var(--text);text-decoration:none;font-weight:500;}
+  .brand span{color:var(--red-soft);}
+  .navlinks{display:flex;gap:34px;list-style:none;}
+  .navlinks a{color:var(--text-dim);text-decoration:none;font-size:14.5px;letter-spacing:.2px;transition:color .25s;font-weight:400;}
+  .navlinks a:hover{color:var(--red-soft);}
+
+  section, .hero{position:relative;z-index:2;padding:130px 0;}
+  .hero{min-height:90vh;display:flex;flex-direction:column;justify-content:center;padding:110px 0 90px;}
+
+  .hero-eyebrow{font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:3px;color:var(--text-faint);text-transform:uppercase;margin-bottom:18px;}
+  h1.mainname{
+    font-family:'Inter',sans-serif;font-weight:700;
+    font-size:clamp(38px,6vw,64px);line-height:1.08;color:var(--white);margin-bottom:10px;letter-spacing:-1px;
+  }
+  .role-tag{font-family:'JetBrains Mono',monospace;font-size:13.5px;letter-spacing:1.5px;color:var(--red-soft);margin-bottom:30px;}
+  .hero-desc{max-width:600px;color:var(--text-dim);font-size:19px;line-height:1.65;font-weight:300;}
+  .hero-cta{display:flex;gap:14px;margin-top:38px;flex-wrap:wrap;}
+  .btn{
+    font-family:'Inter',sans-serif;font-size:14.5px;font-weight:500;
+    padding:14px 28px;border-radius:3px;text-decoration:none;transition:all .25s;
+    display:inline-flex;align-items:center;gap:8px;cursor:pointer;border:1px solid transparent;
+  }
+  .btn-primary{background:var(--red);color:#fff;}
+  .btn-primary:hover{background:var(--red-soft);transform:translateY(-1px);}
+  .btn-ghost{border:1px solid var(--border-strong);color:var(--text);background:transparent;}
+  .btn-ghost:hover{background:rgba(255,255,255,.05);}
+
+  .num{font-family:'JetBrains Mono',monospace;color:var(--red-soft);font-size:13px;letter-spacing:2px;}
+  .section-head{display:flex;align-items:baseline;gap:16px;margin-bottom:44px;padding-bottom:18px;border-bottom:1px solid var(--border);}
+  .section-head h2{font-family:'Inter',sans-serif;font-size:26px;font-weight:600;color:var(--white);}
+
+  /* About */
+  .about-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:60px;}
+  @media(max-width:780px){.about-grid{grid-template-columns:1fr;}}
+  .about-text p{color:var(--text-dim);line-height:1.85;font-size:16px;font-weight:300;}
+  .about-text p+p{margin-top:18px;}
+  .about-text b, .about-text strong{color:var(--white);font-weight:600;}
+  .stat-col{display:flex;flex-direction:column;gap:12px;}
+  .stat-box{
+    border:1px solid var(--border);border-radius:6px;padding:18px 20px;
+    display:flex;align-items:center;justify-content:space-between;background:var(--bg-card);
+  }
+  .stat-box .slabel{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-faint);letter-spacing:.5px;}
+  .stat-box .sval{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text);}
+
+  /* Skills */
+  .skill-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media(max-width:700px){.skill-grid{grid-template-columns:1fr;}}
+  .skill-box{border:1px solid var(--border);border-radius:6px;padding:22px 24px;background:var(--bg-card);}
+  .skill-box .sk-label{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-faint);margin-bottom:14px;}
+  .skill-tags{display:flex;flex-wrap:wrap;gap:8px;}
+  .skill-chip{font-family:'JetBrains Mono',monospace;font-size:12px;padding:6px 12px;border:1px solid var(--border);border-radius:4px;color:var(--text-dim);}
+
+  /* Experience */
+  .exp-card{border:1px solid var(--border);border-radius:8px;padding:36px;background:var(--bg-card);}
+  .exp-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:6px;}
+  .exp-title{font-size:21px;font-weight:600;color:var(--white);}
+  .exp-sub{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text-dim);margin-bottom:20px;}
+  .exp-tag{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-faint);border:1px solid var(--border);padding:5px 12px;border-radius:20px;white-space:nowrap;}
+  .exp-card p{color:var(--text-dim);line-height:1.8;font-size:15px;font-weight:300;margin-bottom:22px;}
+  .exp-tags{display:flex;flex-wrap:wrap;gap:8px;}
+  .exp-tags span{font-family:'JetBrains Mono',monospace;font-size:12px;padding:6px 12px;border:1px solid var(--border);border-radius:4px;color:var(--text-dim);}
+
+  /* Projects grid */
+  .project-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  @media(max-width:760px){.project-grid{grid-template-columns:1fr;}}
+  .pcard{
+    border:1px solid var(--border);border-radius:8px;padding:30px;background:var(--bg-card);
+    cursor:pointer;transition:all .3s;
+  }
+  .pcard:hover{border-color:var(--red);transform:translateY(-3px);box-shadow:0 10px 30px rgba(239,68,68,.12);}
+  .pcard-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+  .pcard-num{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--text-faint);}
+  .status-pill{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.5px;border:1px solid var(--border-strong);padding:4px 12px;border-radius:20px;color:var(--text-dim);}
+  .pcard h3{font-size:19px;font-weight:600;color:var(--white);margin-bottom:12px;}
+  .pcard p.tagline{color:var(--text-dim);font-size:14px;line-height:1.7;font-weight:300;margin-bottom:20px;min-height:70px;}
+  .pcard-tech{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:22px;}
+  .pcard-tech span{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-faint);border:1px solid var(--border);padding:3px 10px;border-radius:3px;}
+  .pcard-open{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:500;color:var(--text);display:flex;align-items:center;gap:6px;}
+  .pcard-open svg{transition:transform .25s;}
+  .pcard:hover .pcard-open svg{transform:translateX(4px);}
+
+  .add-card{
+    border:1px dashed var(--border-strong);border-radius:8px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+    cursor:pointer;min-height:220px;color:var(--text-faint);transition:all .3s;
+  }
+  .add-card:hover{border-color:var(--red);color:var(--red-soft);background:rgba(239,68,68,.04);}
+  .add-card .plus{font-size:30px;font-weight:300;line-height:1;}
+  .add-card span.label{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:1px;}
+
+  /* Contact */
+  .contact-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:60px;align-items:center;}
+  @media(max-width:760px){.contact-grid{grid-template-columns:1fr;}}
+  .contact-left h2{font-size:36px;font-weight:700;color:var(--white);line-height:1.15;margin-bottom:18px;}
+  .contact-left p{color:var(--text-dim);font-size:16px;line-height:1.75;font-weight:300;max-width:440px;}
+  .contact-boxes{display:flex;flex-direction:column;gap:14px;}
+  .cbox{
+    display:flex;align-items:center;gap:16px;border:1px solid var(--border);border-radius:8px;
+    padding:18px 20px;background:var(--bg-card);text-decoration:none;color:var(--text);transition:all .25s;
+  }
+  .cbox:hover{border-color:var(--red);transform:translateX(3px);}
+  .cbox .cicon{
+    width:38px;height:38px;border-radius:6px;background:rgba(239,68,68,0.14);color:var(--red-soft);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .cbox .clabel{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--text-faint);margin-bottom:3px;}
+  .cbox .cval{font-size:15px;font-weight:600;color:var(--white);}
+
+  footer{padding:40px 0 44px;text-align:center;border-top:1px solid var(--border);}
+  footer p{color:var(--text-faint);font-size:13px;font-family:'JetBrains Mono',monospace;}
+
+  /* ============ CASE STUDY VIEW ============ */
+  #caseStudyView{display:none;position:relative;z-index:2;min-height:100vh;}
+  .cs-wrap{max-width:900px;margin:0 auto;padding:60px 32px 100px;}
+  .cs-back{
+    font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text-dim);text-decoration:none;
+    display:inline-flex;align-items:center;gap:8px;margin-bottom:40px;cursor:pointer;transition:color .2s;
+  }
+  .cs-back:hover{color:var(--red-soft);}
+  .cs-tags{display:flex;gap:10px;margin-bottom:26px;flex-wrap:wrap;}
+  .cs-tags span{font-family:'JetBrains Mono',monospace;font-size:12px;border:1px solid var(--border-strong);padding:6px 14px;border-radius:20px;color:var(--text-dim);}
+  .cs-title{font-size:clamp(34px,5vw,52px);font-weight:700;color:var(--white);line-height:1.08;margin-bottom:22px;letter-spacing:-1px;}
+  .cs-desc{color:var(--text-dim);font-size:17px;line-height:1.75;font-weight:300;max-width:680px;margin-bottom:40px;}
+  .cs-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:70px;}
+  @media(max-width:700px){.cs-stats{grid-template-columns:1fr;}}
+  .cs-stat{border:1px solid var(--border);border-radius:6px;padding:18px 20px;background:var(--bg-card);}
+  .cs-stat .cslabel{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text-faint);margin-bottom:8px;}
+  .cs-stat .csval{font-size:14.5px;color:var(--text);font-weight:500;}
+
+  .cs-section{margin-bottom:56px;}
+  .cs-section-head{display:flex;align-items:center;gap:14px;margin-bottom:22px;}
+  .cs-section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--red-soft);}
+  .cs-section-head h3{font-size:23px;font-weight:600;color:var(--white);}
+  .cs-section > p.body-text{color:var(--text-dim);font-size:15.5px;line-height:1.85;font-weight:300;max-width:720px;}
+
+  .cs-list{display:flex;flex-direction:column;gap:12px;}
+  .cs-list-item{border:1px solid var(--border);border-radius:6px;padding:20px 22px;background:var(--bg-card);}
+  .cs-list-item .li-title{font-size:15px;font-weight:600;color:var(--white);margin-bottom:6px;display:flex;gap:8px;align-items:baseline;}
+  .cs-list-item .li-title .dot{color:var(--text-faint);}
+  .cs-list-item .li-body{color:var(--text-dim);font-size:14px;line-height:1.75;font-weight:300;}
+
+  .cs-kv{display:flex;flex-direction:column;gap:10px;}
+  .cs-kv-row{
+    display:grid;grid-template-columns:200px 1fr;gap:20px;border:1px solid var(--border);
+    border-radius:6px;padding:16px 20px;background:var(--bg-card);align-items:baseline;
+  }
+  @media(max-width:600px){.cs-kv-row{grid-template-columns:1fr;gap:6px;}}
+  .cs-kv-row .kvk{font-size:14px;font-weight:600;color:var(--white);}
+  .cs-kv-row .kvv{font-size:14px;color:var(--text-dim);font-weight:300;line-height:1.6;}
+
+  .cs-check{display:flex;flex-direction:column;gap:12px;}
+  .cs-check-item{border:1px solid var(--border);border-radius:6px;padding:20px 22px;background:var(--bg-card);}
+  .cs-check-item .ci-title{font-size:15px;font-weight:600;color:var(--white);margin-bottom:6px;}
+  .cs-check-item .ci-title::before{content:'✓ ';color:var(--text-dim);}
+  .cs-check-item .ci-body{color:var(--text-dim);font-size:14px;line-height:1.75;font-weight:300;}
+
+  .cs-nav{display:flex;justify-content:space-between;align-items:center;margin-top:60px;padding-top:36px;border-top:1px solid var(--border);gap:14px;flex-wrap:wrap;}
+</style>
+</head>
+<body>
+
+<div id="introScreen">
+  <video id="introVideo" src="intro.mp4" playsinline></video>
+  <button id="playIntroBtn" class="play-btn" aria-label="Play intro">
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+  </button>
+</div>
+
+<canvas id="stars"></canvas>
+
+<nav>
+  <div class="wrap">
+    <a href="#top" class="brand" onclick="showMain('top')">AR <span>// PORTFOLIO</span></a>
+    <ul class="navlinks">
+      <li><a href="#about" onclick="showMain('about')">About</a></li>
+      <li><a href="#skills" onclick="showMain('skills')">Skills</a></li>
+      <li><a href="#work" onclick="showMain('work')">Work</a></li>
+      <li><a href="#projects" onclick="showMain('projects')">Projects</a></li>
+      <li><a href="#contact" onclick="showMain('contact')">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="mainView">
+
+  <div id="top" class="wrap hero">
+    <div class="hero-eyebrow">Portfolio</div>
+    <h1 class="mainname">Abdul Rithin</h1>
+    <div class="role-tag">FULL STACK DEVELOPER · AI FOCUS</div>
+    <p class="hero-desc">Building at the intersection of intelligent systems and clean interfaces. I write code that thinks, and design systems that scale.</p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn btn-primary" onclick="showMain('projects')">View Projects</a>
+      <a href="#contact" class="btn btn-ghost" onclick="showMain('contact')">Get in Touch</a>
+    </div>
+  </div>
+
+  <section id="about">
+    <div class="wrap">
+      <div class="section-head"><span class="num">001</span><h2>About</h2></div>
+      <div class="about-grid">
+        <div class="about-text">
+          <p>Hey, I'm <b>Abdul Rithin</b> — a passionate and enthusiastic technology learner with knowledge spanning <b>programming, web development, networking, and AI tools</b>. Currently interning at Seattle Technologies as a Full Stack Developer with an AI focus.</p>
+          <p>I work across the entire stack — from foundational <b>network layer 2</b> concepts to polished frontend interfaces — and I'm experienced with <b>20+ AI tools</b> in my day-to-day workflow. I built an <b>AI Code Assistant</b> that's actively used in my team's development pipeline.</p>
+          <p>Outside of work, I'm building <b>Kabilan AI</b> and <b>SKCAS Voice</b> — two projects that bring AI to Tamil-speaking learners and students. Always curious, always compiling.</p>
+        </div>
+        <div class="stat-col">
+          <div class="stat-box"><span class="slabel">Status</span><span class="sval">Available for work</span></div>
+          <div class="stat-box"><span class="slabel">Location</span><span class="sval">Coimbatore, TN / Remote</span></div>
+          <div class="stat-box"><span class="slabel">Focus</span><span class="sval">Full Stack + AI</span></div>
+          <div class="stat-box"><span class="slabel">Experience</span><span class="sval">Intern @ Seattle Technologies</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="wrap">
+      <div class="section-head"><span class="num">002</span><h2>Skills</h2></div>
+      <div class="skill-grid">
+        <div class="skill-box"><div class="sk-label">Programming Languages</div>
+          <div class="skill-tags"><span class="skill-chip">Python</span><span class="skill-chip">Java</span><span class="skill-chip">C++</span><span class="skill-chip">C</span></div></div>
+        <div class="skill-box"><div class="sk-label">Web Technologies</div>
+          <div class="skill-tags"><span class="skill-chip">HTML</span><span class="skill-chip">CSS</span><span class="skill-chip">JavaScript</span></div></div>
+        <div class="skill-box"><div class="sk-label">Databases</div>
+          <div class="skill-tags"><span class="skill-chip">SQL</span></div></div>
+        <div class="skill-box"><div class="sk-label">Backend</div>
+          <div class="skill-tags"><span class="skill-chip">Flask</span><span class="skill-chip">Flask API</span><span class="skill-chip">ASP.NET</span></div></div>
+        <div class="skill-box"><div class="sk-label">Tools &amp; Platforms</div>
+          <div class="skill-tags"><span class="skill-chip">VS Code</span><span class="skill-chip">IDLE Python</span><span class="skill-chip">Linux</span><span class="skill-chip">Kali Linux</span><span class="skill-chip">GitHub</span><span class="skill-chip">Figma</span><span class="skill-chip">Photoshop</span><span class="skill-chip">20+ AI Tools</span></div></div>
+        <div class="skill-box"><div class="sk-label">Networking</div>
+          <div class="skill-tags"><span class="skill-chip">Network Layer 2 (Basics)</span></div></div>
+        <div class="skill-box"><div class="sk-label">Soft Skills</div>
+          <div class="skill-tags"><span class="skill-chip">Communication</span><span class="skill-chip">Problem Solving</span><span class="skill-chip">Adaptability</span><span class="skill-chip">Creativity</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="work">
+    <div class="wrap">
+      <div class="section-head"><span class="num">003</span><h2>Experience</h2></div>
+      <div class="exp-card">
+        <div class="exp-top">
+          <div>
+            <div class="exp-title">Full Stack Developer Intern — AI Focus</div>
+            <div class="exp-sub">Seattle Technologies — Final Year Project Center &amp; Internship Training</div>
+          </div>
+          <span class="exp-tag">2026 · 1 Month</span>
+        </div>
+        <p>Worked as a Full Stack Developer Intern with a focus on AI-integrated web applications. Built and tested AI-powered features and logic flows using Python and JavaScript, and designed responsive, user-friendly interfaces under mentor guidance — including an AI Code Assistant hooked directly into the team's active development workflow.</p>
+        <div class="exp-tags">
+          <span>Python</span><span>JavaScript</span><span>AI Tool Integration</span><span>HTML/CSS</span><span>Full Stack</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="wrap">
+      <div class="section-head"><span class="num">004</span><h2>Projects</h2></div>
+      <div class="project-grid" id="projectGrid"></div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap">
+      <div class="section-head"><span class="num">005</span><h2>Contact</h2></div>
+      <div class="contact-grid">
+        <div class="contact-left">
+          <h2>Let's build something real.</h2>
+          <p>Open to internships, freelance work, and collaborations. If you have an idea that needs an AI-savvy full-stack developer — I'm your guy.</p>
+        </div>
+        <div class="contact-boxes">
+          <a class="cbox" href="mailto:iabdulrithiniqbal@gmail.com">
+            <span class="cicon">✉</span>
+            <div><div class="clabel">Email</div><div class="cval">iabdulrithiniqbal@gmail.com</div></div>
+          </a>
+          <a class="cbox" href="tel:8248501198">
+            <span class="cicon">☎</span>
+            <div><div class="clabel">Phone</div><div class="cval">+91 82485 01198</div></div>
+          </a>
+          <a class="cbox" href="https://www.linkedin.com/in/abdul-rithin-7957a1395" target="_blank" rel="noopener">
+            <span class="cicon">in</span>
+            <div><div class="clabel">LinkedIn</div><div class="cval">abdul-rithin-7957a1395</div></div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 Abdul Rithin · Built in the void, shipped to the stars</p>
+  </footer>
+
+</main>
+
+<div id="caseStudyView">
+  <div class="cs-wrap" id="csContent"></div>
+</div>
+
+<div class="modal-overlay" id="addOverlay" style="position:fixed;inset:0;z-index:100;background:rgba(3,2,8,0.85);backdrop-filter:blur(6px);display:none;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto;">
+  <div id="addModalContent" style="background:#0d0d0d;border:1px solid var(--border);border-radius:10px;max-width:640px;width:100%;padding:44px 40px 48px;position:relative;margin:auto 0;"></div>
+</div>
+
+<script>
+/* ============ INTRO SCREEN ============ */
+const introScreen = document.getElementById('introScreen');
+const introVideo = document.getElementById('introVideo');
+const playIntroBtn = document.getElementById('playIntroBtn');
+function endIntro(){
+  introScreen.classList.add('fade-out');
+  document.body.style.overflow='';
+  setTimeout(()=>{ introScreen.style.display='none'; }, 750);
+}
+playIntroBtn.addEventListener('click', ()=>{
+  introVideo.muted = false;
+  introVideo.play();
+  playIntroBtn.style.display='none';
+});
+introVideo.addEventListener('ended', endIntro);
+document.body.style.overflow='hidden';
+
+/* ============ STARFIELD (sparse, monochrome) ============ */
+const canvas = document.getElementById('stars');
+const ctx = canvas.getContext('2d');
+let w,h,stars=[];
+function resize(){
+  w = canvas.width = window.innerWidth;
+  h = canvas.height = document.body.scrollHeight;
+  stars = [];
+  const count = Math.floor((w*h)/8000);
+  for(let i=0;i<count;i++){
+    stars.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.3+0.3,a:Math.random()*0.6+0.15});
+  }
+}
+function draw(){
+  ctx.clearRect(0,0,w,h);
+  for(const s of stars){
+    ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(255,255,255,${s.a})`;ctx.fill();
+  }
+}
+window.addEventListener('resize', ()=>{resize();draw();});
+window.addEventListener('load', ()=>{resize();draw();});
+setTimeout(()=>{resize();draw();}, 500);
+
+/* ============ PROJECT DATA ============ */
+const projects = [
+  {
+    id:"kabilan-ai", num:"01", title:"Kabilan AI", status:"Live",
+    tagline:"Adaptive Tamil / Tanglish AI coding tutor chatbot. Detects skill level, adapts analogies to user interests, and teaches programming in Tamil, Tanglish, or English.",
+    tech:["React","Claude API","Pyodide","Web Speech API"],
+    cs:{
+      tags:["AI Product","Completed"],
+      title:"Kabilan AI",
+      description:"Kabilan AI is a fully adaptive, AI-powered coding tutor chatbot that teaches programming in a personalized, human-like way — communicating fluently in Tamil, Tanglish, and English, and adapting analogies, explanation depth, and pace to each learner in real time.",
+      stats:[{label:"Platform",value:"React (Single-file JSX) + Claude API"},{label:"Languages Supported",value:"Tamil · Tanglish · English"},{label:"Status",value:"Completed — Live & Iteratively Upgraded"}],
+      sections:[
+        {num:"01",heading:"Project Objective",type:"text",content:"To build an intelligent, conversational coding-education platform that removes the language and intimidation barrier many Tamil-speaking beginners face when learning programming from English-only resources — while still scaling up to advanced, technically deep instruction as the learner grows."},
+        {num:"02",heading:"Core Features",type:"list",content:[
+          {t:"Adaptive Teaching Engine",b:"Detects beginner / intermediate / advanced level from conversation patterns and adjusts explanation depth accordingly."},
+          {t:"Interest-Based Analogies",b:"Maps coding concepts to the user's real-world interests — cricket overs for loops, game stats for variables, and more."},
+          {t:"Trilingual Support",b:"Fluent in Tamil script, Tanglish, and English — switches naturally per user preference."},
+          {t:"Tamil Mode Toggle",b:"A header button that locks responses to pure Tamil Unicode when ON, and zero Tamil characters when OFF."},
+          {t:"IPO Code Generation",b:"Any build/generate request triggers a complete, runnable code block structured around Input–Process–Output."},
+          {t:"Live Code Execution",b:"JavaScript runs sandboxed in-browser; Python runs via Pyodide (CPython compiled to WebAssembly)."},
+          {t:"Voice Input & Output",b:"Web Speech API for mic input with permission handling; SpeechSynthesis for spoken replies."},
+          {t:"Adaptive Quiz Engine",b:"Auto-generated 3-question quizzes; scoring 2/3 or higher automatically upgrades the learner's level."}
+        ]},
+        {num:"03",heading:"Adaptive Teaching Logic",type:"text",content:"A lightweight learner profile is built and refined throughout the conversation — tracking detected level, interests (cricket, gaming, food, shopping), and visited topics — so every explanation is calibrated to the person actually asking."},
+        {num:"04",heading:"Language Mode Behavior",type:"kv",content:[
+          {k:"Tamil Mode — ON",v:"Every response is written in pure Tamil Unicode script, with zero English words in explanations."},
+          {k:"Tamil Mode — OFF (Tanglish)",v:"Zero Tamil Unicode characters anywhere in the response; pronunciation is written only in English script."}
+        ]},
+        {num:"05",heading:"Technical Architecture",type:"kv",content:[
+          {k:"UI Framework",v:"React (functional components, Hooks) — single self-contained .jsx artifact"},
+          {k:"Styling",v:"Inline styles + CSS-in-JS animations; custom dark/light theme tokens"},
+          {k:"AI Backend",v:"Anthropic Claude API called directly from the client via fetch()"},
+          {k:"System Prompt Engine",v:"Dynamically rebuilt per message — injects level, interests, topics, and language mode"},
+          {k:"Code Execution (JS)",v:"Sandboxed via the Function constructor with a mocked console"},
+          {k:"Code Execution (Python)",v:"Pyodide, loaded on-demand from CDN; stdout captured via io.StringIO"},
+          {k:"Voice",v:"Web Speech API (SpeechRecognition) + SpeechSynthesisUtterance"}
+        ]},
+        {num:"06",heading:"Key Engineering Fixes",type:"check",content:[
+          {t:"Voice input not working",b:"Root cause was a stale closure bug in the recording-stop handler. Fixed with a persistent transcript ref and explicit getUserMedia permission handling."},
+          {t:"Hold-to-record reliability",b:"Mouse-down/mouse-up was unreliable in a sandboxed iframe. Replaced with a robust click-to-toggle flow."},
+          {t:"Tamil script leaking into Tanglish mode",b:"Audited all UI strings and made them strictly conditional on the active language mode."},
+          {t:"Quiz results not reliably triggering level-up",b:"Hardened the level-up handler to remove any silent failure path."},
+          {t:"Code generation inconsistency",b:"Rewrote the system prompt around a strict IPO model, guaranteeing complete, runnable code every time."}
+        ]},
+        {num:"07",heading:"UI / UX Summary",type:"list",content:[
+          {t:"Chat interface",b:"Distinct user/AI bubbles, rounded corners, soft dark theme."},
+          {t:"Collapsible sidebar",b:"Learning topics, live profile card (level + interests), and voice-reply toggle."},
+          {t:"Inline code blocks",b:"Styled like a code editor — traffic-light header, Run / Edit / Copy actions, colored output console."},
+          {t:"Floating Level Up banner",b:"Animated confirmation on successful quiz completion."}
+        ]}
+      ]
+    }
+  },
+  {
+    id:"skcas-voice", num:"02", title:"SKCAS Voice", status:"In Progress",
+    tagline:"AI-powered smart complaint & escalation system for students — supports voice, text, and Thanglish input with AI categorization and automatic routing.",
+    tech:["Flask","MySQL","NLP","Speech-to-Text"],
+    cs:{
+      tags:["Web Application","In Progress"],
+      title:"SKCAS Voice",
+      description:"SKCAS Voice lets students submit complaints using text, voice, or Thanglish, and ensures every complaint is properly categorized, routed, tracked, and resolved — built for students who hesitate to report issues due to fear or lack of a clear process.",
+      stats:[{label:"Frontend",value:"HTML · CSS · JS"},{label:"Backend",value:"Flask + MySQL"},{label:"Status",value:"In Progress"}],
+      sections:[
+        {num:"01",heading:"Overview",type:"text",content:"SKCAS Voice is an AI-powered platform that allows students of SKCAS to submit complaints using text, voice, or Thanglish and ensures proper routing, tracking, and resolution."},
+        {num:"02",heading:"Problem Statement",type:"text",content:"Students face issues but hesitate to report due to fear, lack of awareness, and no proper tracking system — so complaints go unheard."},
+        {num:"03",heading:"Objective",type:"text",content:"To create a smart complaint system with AI-based categorization, routing, and escalation."},
+        {num:"04",heading:"Key Features",type:"list",content:[
+          {t:"Voice & Text Complaint",b:"Tamil, English, and Thanglish support, with an anonymous complaint option."},
+          {t:"AI Categorization & Priority Detection",b:"Automatically classifies and prioritizes incoming complaints."},
+          {t:"Automatic Routing",b:"Directs each complaint to the right department."},
+          {t:"Timeline Tracking & Reminders",b:"Keeps every complaint visible with a built-in escalation system."}
+        ]},
+        {num:"05",heading:"Technology Stack",type:"kv",content:[
+          {k:"Frontend",v:"HTML, CSS, JS"},{k:"Backend",v:"Flask"},{k:"Database",v:"MySQL"},{k:"AI",v:"NLP, Speech-to-Text"}
+        ]},
+        {num:"06",heading:"Conclusion",type:"text",content:"SKCAS Voice ensures every student complaint is heard, tracked, and resolved efficiently using AI and automation — turning a system built on fear and silence into one built on visibility and accountability."}
+      ]
+    }
+  },
+  {
+    id:"ai-code-assistant", num:"03", title:"AI Code Assistant", status:"Live",
+    tagline:"Intelligent code assistant integrated into the dev workflow at my internship. Handles autocomplete, bug detection, and documentation generation in production.",
+    tech:["Python","LLM API","FastAPI","React"],
+    cs:{
+      tags:["Internship Build","Live"],
+      title:"AI Code Assistant",
+      description:"Built during my internship at Seattle Technologies — an AI-powered coding assistant hooked directly into the team's existing development workflow rather than running as a separate tool, automating code review, suggestions, and documentation generation.",
+      stats:[{label:"Backend",value:"Python, FastAPI"},{label:"AI Layer",value:"LLM API Integration"},{label:"Frontend",value:"React"}],
+      sections:[
+        {num:"01",heading:"Overview",type:"text",content:"Working as a full-stack developer intern with a focus on AI-powered tooling, I built and deployed an AI Code Assistant now integrated into the team's active development pipeline — contributing to both frontend interfaces and backend APIs."},
+        {num:"02",heading:"Integration Approach",type:"text",content:"Hooked directly into the team's existing development workflow rather than running as a separate tool, so suggestions, autocomplete, and documentation generation happen in the same place developers already work."},
+        {num:"03",heading:"Technology Stack",type:"kv",content:[
+          {k:"Backend",v:"Python, FastAPI"},
+          {k:"AI Layer",v:"LLM API integration for code understanding and generation"},
+          {k:"Frontend",v:"React"},
+          {k:"Workflow",v:"Full Stack — owned both client interface and backend API design"}
+        ]}
+      ]
+    }
+  },
+  {
+    id:"birthday-generator", num:"04", title:"Happy Birthday Site Generator", status:"Completed",
+    tagline:"A web application that generates customizable birthday website templates — pick a theme, add a name and message, and generate a personal, shareable page in seconds.",
+    tech:["HTML","CSS","JavaScript"],
+    cs:{
+      tags:["Web Application","Completed"],
+      title:"Happy Birthday Site Generator",
+      description:"A web application that generates customizable birthday website templates — pick a theme, add a name and message, and generate a personal, shareable birthday page in seconds.",
+      stats:[{label:"Frontend",value:"HTML · CSS · JavaScript"},{label:"Type",value:"Template Generator"},{label:"Status",value:"Completed"}],
+      sections:[
+        {num:"01",heading:"Overview",type:"text",content:"A lightweight web app that takes the effort out of making someone a birthday surprise online. Users pick a theme, add a name and personal message, and instantly get a shareable birthday website — no coding or design skill required."},
+        {num:"02",heading:"Focus Areas",type:"list",content:[
+          {t:"Personalized Message Generation",b:"User-friendly inputs produce a customized birthday message and page layout."},
+          {t:"Template-Based Theming",b:"Multiple visual themes to pick from, keeping the output creative and shareable."},
+          {t:"No-Code Customization",b:"Anyone can generate and share a page without touching a line of code."}
+        ]},
+        {num:"03",heading:"Technology Stack",type:"kv",content:[
+          {k:"Frontend",v:"HTML, CSS, JavaScript"},{k:"Output",v:"Static, shareable single-page site"}
+        ]}
+      ]
+    }
+  }
+];
+
+/* ============ RENDER PROJECT CARDS ============ */
+const grid = document.getElementById('projectGrid');
+function renderGrid(){
+  grid.innerHTML = projects.map(p => `
+    <div class="pcard" data-id="${p.id}">
+      <div class="pcard-top"><span class="pcard-num">${p.num}</span><span class="status-pill">${p.status}</span></div>
+      <h3>${p.title}</h3>
+      <p class="tagline">${p.tagline}</p>
+      <div class="pcard-tech">${p.tech.map(t=>`<span>${t}</span>`).join('')}</div>
+      <div class="pcard-open">View case study
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </div>
+    </div>
+  `).join('') + `<div class="pcard add-card" id="addCardBtn"><div class="plus">+</div><span class="label">ADD NEW PROJECT</span></div>`;
+  document.getElementById('addCardBtn').addEventListener('click', openAddForm);
+  grid.querySelectorAll('.pcard[data-id]').forEach(c=>{
+    c.addEventListener('click', ()=>openCaseStudy(c.dataset.id));
+  });
+}
+renderGrid();
+
+/* ============ VIEW SWITCHING ============ */
+const mainView = document.getElementById('mainView');
+const csView = document.getElementById('caseStudyView');
+function showMain(anchor){
+  csView.style.display='none';
+  mainView.style.display='';
+  document.body.style.overflow='';
+  if(anchor && anchor!=='top'){
+    setTimeout(()=>{
+      const el = document.getElementById(anchor);
+      if(el) el.scrollIntoView({behavior:'smooth'});
+    },30);
+  } else {
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+}
+
+function renderCsSection(sec){
+  let inner='';
+  if(sec.type==='text'){
+    inner = `<p class="body-text">${sec.content}</p>`;
+  } else if(sec.type==='list'){
+    inner = `<div class="cs-list">${sec.content.map(i=>`<div class="cs-list-item"><div class="li-title"><span class="dot">•</span>${i.t}</div><div class="li-body">${i.b}</div></div>`).join('')}</div>`;
+  } else if(sec.type==='kv'){
+    inner = `<div class="cs-kv">${sec.content.map(i=>`<div class="cs-kv-row"><div class="kvk">${i.k}</div><div class="kvv">${i.v}</div></div>`).join('')}</div>`;
+  } else if(sec.type==='check'){
+    inner = `<div class="cs-check">${sec.content.map(i=>`<div class="cs-check-item"><div class="ci-title">${i.t}</div><div class="ci-body">${i.b}</div></div>`).join('')}</div>`;
+  }
+  return `<div class="cs-section"><div class="cs-section-head"><span class="cs-section-num">${sec.num}</span><h3>${sec.heading}</h3></div>${inner}</div>`;
+}
+
+function openCaseStudy(id){
+  const idx = projects.findIndex(x=>x.id===id);
+  const p = projects[idx];
+  if(!p) return;
+  const prev = projects[(idx-1+projects.length)%projects.length];
+  const next = projects[(idx+1)%projects.length];
+  const c = p.cs;
+  document.getElementById('csContent').innerHTML = `
+    <a class="cs-back" onclick="showMain('projects')">← Back to projects</a>
+    <div class="cs-tags">${c.tags.map(t=>`<span>${t}</span>`).join('')}</div>
+    <h1 class="cs-title">${c.title}</h1>
+    <p class="cs-desc">${c.description}</p>
+    <div class="cs-stats">${c.stats.map(s=>`<div class="cs-stat"><div class="cslabel">${s.label}</div><div class="csval">${s.value}</div></div>`).join('')}</div>
+    ${c.sections.map(renderCsSection).join('')}
+    <div class="cs-nav">
+      <a class="btn btn-ghost" onclick="openCaseStudy('${prev.id}')">← ${prev.title}</a>
+      <a class="btn btn-ghost" onclick="openCaseStudy('${next.id}')">Next: ${next.title} →</a>
+    </div>
+  `;
+  mainView.style.display='none';
+  csView.style.display='block';
+  window.scrollTo({top:0,behavior:'instant'});
+}
+
+/* ============ ADD NEW PROJECT ============ */
+const addOverlay = document.getElementById('addOverlay');
+const addModalContent = document.getElementById('addModalContent');
+function openAddForm(){
+  addModalContent.innerHTML = `
+    <h2 style="font-size:24px;font-weight:600;color:var(--white);margin-bottom:6px;">Add New Project</h2>
+    <p style="font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--text-faint);margin-bottom:26px;">This will appear as a new case study in your project grid.</p>
+    <form id="newProjectForm">
+      <div style="margin-bottom:16px;"><label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);margin-bottom:7px;">Title</label>
+        <input id="npTitle" required style="width:100%;background:#0a0a0a;border:1px solid var(--border);border-radius:4px;padding:11px 14px;color:var(--text);font-family:inherit;font-size:14px;"></div>
+      <div style="margin-bottom:16px;"><label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);margin-bottom:7px;">Status</label>
+        <select id="npStatus" style="width:100%;background:#0a0a0a;border:1px solid var(--border);border-radius:4px;padding:11px 14px;color:var(--text);font-family:inherit;font-size:14px;">
+          <option value="Completed">Completed</option><option value="Live">Live</option><option value="In Progress">In Progress</option>
+        </select></div>
+      <div style="margin-bottom:16px;"><label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);margin-bottom:7px;">Tagline</label>
+        <input id="npTagline" required style="width:100%;background:#0a0a0a;border:1px solid var(--border);border-radius:4px;padding:11px 14px;color:var(--text);font-family:inherit;font-size:14px;"></div>
+      <div style="margin-bottom:16px;"><label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);margin-bottom:7px;">Tech (comma separated)</label>
+        <input id="npTech" style="width:100%;background:#0a0a0a;border:1px solid var(--border);border-radius:4px;padding:11px 14px;color:var(--text);font-family:inherit;font-size:14px;"></div>
+      <div style="margin-bottom:16px;"><label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);margin-bottom:7px;">Summary</label>
+        <textarea id="npSummary" required style="width:100%;min-height:70px;background:#0a0a0a;border:1px solid var(--border);border-radius:4px;padding:11px 14px;color:var(--text);font-family:inherit;font-size:14px;"></textarea></div>
+      <div style="margin-bottom:22px;"><label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);margin-bottom:7px;">Key Features (one per line)</label>
+        <textarea id="npFeatures" style="width:100%;min-height:90px;background:#0a0a0a;border:1px solid var(--border);border-radius:4px;padding:11px 14px;color:var(--text);font-family:inherit;font-size:14px;"></textarea></div>
+      <div style="display:flex;gap:12px;">
+        <button type="submit" class="btn btn-primary">Add Project</button>
+        <button type="button" class="btn btn-ghost" id="addCancelBtn">Cancel</button>
+      </div>
+    </form>
+  `;
+  addOverlay.style.display='flex';
+  document.body.style.overflow='hidden';
+  document.getElementById('addCancelBtn').addEventListener('click', closeAddForm);
+  document.getElementById('newProjectForm').addEventListener('submit', handleAddProject);
+}
+function closeAddForm(){ addOverlay.style.display='none'; document.body.style.overflow=''; }
+addOverlay.addEventListener('click', e=>{ if(e.target===addOverlay) closeAddForm(); });
+function slugify(str){ return str.toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'') + '-' + Date.now().toString().slice(-4); }
+function handleAddProject(e){
+  e.preventDefault();
+  const title = document.getElementById('npTitle').value.trim();
+  const status = document.getElementById('npStatus').value;
+  const tagline = document.getElementById('npTagline').value.trim();
+  const tech = document.getElementById('npTech').value.split(',').map(t=>t.trim()).filter(Boolean);
+  const summary = document.getElementById('npSummary').value.trim();
+  const features = document.getElementById('npFeatures').value.split('\n').map(f=>f.trim()).filter(Boolean);
+  const num = String(projects.length+1).padStart(2,'0');
+  const sections = [{num:"01",heading:"Overview",type:"text",content:summary}];
+  if(features.length) sections.push({num:"02",heading:"Key Features",type:"list",content:features.map(f=>({t:f,b:""}))});
+  projects.push({
+    id:slugify(title||'project'), num, title, status, tagline, tech,
+    cs:{tags:[status], title, description:summary,
+      stats:[{label:"Tech",value:tech.join(', ')||'—'},{label:"Status",value:status},{label:"Type",value:"Project"}],
+      sections
+    }
+  });
+  renderGrid();
+  closeAddForm();
+}
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeAddForm(); });
+</script>
+</body>
+</html>
